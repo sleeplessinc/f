@@ -18,6 +18,14 @@
 			display: inline;
 			margin-left: 100px;
 		}
+
+		td { vertical-align: top; }
+		#output {
+			font-family: courier;
+			border: solid 1px #aaa;
+			padding: 1em;
+		}
+
 	</style>
 <script src=jquery.js></script>
 <script src=f.js></script>
@@ -26,9 +34,26 @@
 
 	function build(t) {
 		var lines = t.trim().split("\n");
+		var lines2
+		var line
+
+		// merge up any line continuations
+		lines2 = []
+		while(lines.length > 0) {
+			line = lines.shift().trim()
+			while(line.substr(-1) == "\\") {
+				line = line.substr(0, line.length - 1)
+				line = (line + lines.shift()).trim()
+			}
+			lines2.push(line)
+		}
+		lines = lines2
+
+
 		var h = "";
 		for(var i = 0; i < lines.length; i++) {
-			h += lines[i]+"<br>"
+			var line = lines[i].trim()
+			h += line+"<br>"
 		}
 		$("#output").html(h);
 	}
