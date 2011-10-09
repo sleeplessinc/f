@@ -2,27 +2,29 @@
 
 <body>
 	<style>
-		.formclass {
-			border: solid 1px #aaa;
+		td { vertical-align: top; border: dashed 1px green;}
+
+		#work {
+			width: 100%;
+			height: 100%;
+			padding: 1em;
+			border: dashed 1px red;
 		}
-		.formclass .row {
-			padding: 0.2em 0.5em;
-		}
-		.formclass .label {
-			display: inline;
-			float: left;
-			width: 100px;
-			font-weight: bold;
-		}
-		.formclass .field {
-			display: inline;
-			margin-left: 100px;
+		#work td.left { width: 70%; }
+		#work td.right { width: 30%; 100%; }
+
+		#output, #source {
+			font-family: sans-serif;
+			border: solid 1px #888;
+			padding: 1em;
 		}
 
-		td { vertical-align: top; }
-		#output {
-			font-family: courier;
-			border: solid 1px #aaa;
+		#source {
+			font-family: monospace;
+			background: #eee;
+		}
+
+		#input {
 			padding: 1em;
 		}
 
@@ -30,14 +32,15 @@
 <script src=jquery.js></script>
 <script src=f.js></script>
 <script>
-	F.write = function(s) { document.write(s) }
+	//F.write = function(s) { document.write(s) }
 
-	function build(t) {
+
+	function wordLines(t) {
 		var lines = t.trim().split("\n");
-		var lines2
-		var line
+		var lines2, line
+		var words, words2
 
-		// merge up any line continuations
+		// coalesce any line continuations
 		lines2 = []
 		while(lines.length > 0) {
 			line = lines.shift().trim()
@@ -49,33 +52,64 @@
 		}
 		lines = lines2
 
+		lines2 = []
+		while(lines.length > 0) {
+			line = lines.shift().trim()
+			if(line == "" || line.substr(0,1) == "#")
+				continue;
+			line = line.replace(/\\"/g, "=DQ=")
 
-		var h = "";
-		for(var i = 0; i < lines.length; i++) {
-			var line = lines[i].trim()
-			h += line+"<br>"
+			words = line.split(/\s+/)
+
+			// coalesce any double-quoted strings 
+			words2 = [] 
+			while(words.length > 0) {
+				word = words.shift().trim()
+				if(word.substr(0,1) == "\"") {
+					word = word.substr(1)
+					while(word.substr(-1) != "\"") {
+						word += " "+(words.shift() || "\"").trim()
+					}
+					word = word.substr(0, word.length - 1)
+				}
+				words2.push(word.replace(/=DQ=/g, "\""))
+			}
+			words = words2
+
+			lines2.push(words)
 		}
-		$("#output").html(h);
+		lines = lines2
+
+		return lines;
+	}
+
+
+	function build(t) {
+		var lines = wordLines(t)
+		var h = ""
+		for(var l = 0; l < lines.length; l++) {
+			args = lines[l]
+			var a = args.shift();
+			var fn = F[a]
+			if(fn) {
+				h += fn.apply(this, args)+"<br>"
+			}
+		}
+		$("#output").html(h)
+		$("#source").html(h.replace(/</g, "&lt;"))
 	}
 </script>
 
-<table
-	style="width: 100%; height: 100%;"
-	>
-	<tr><td>
-		Output
-	</td><td
-		style="width: 30%;"
-		>
-		Input
-	</td></tr>
-	<tr
-		style="height: 100%;"
-		><td>
+<table id=work>
+	<tr><td class=left>
+		<h3>Output</h3>
 		<div id=output></div>
-	</td><td>
-		<textarea 
-			style="width: 100%; height: 100%;"
-			onchange="build(this.value)"></textarea>
+		<h3>Source</h3>
+		<div id=source></div>
+	</td><td class=right>
+		<div style="width: 100%; height: 100%;">
+			<h3>Input</h3>
+			<textarea style="width: 100%; height: 100%;" onchange="build(this.value)"></textarea>
+		</div>
 	</td></tr>
 </table>
