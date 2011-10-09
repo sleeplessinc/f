@@ -1,47 +1,57 @@
 
-var log = console.log
+if((typeof process) !== 'undefined') {
+	// node.js
+	F = require("./index.js")
+	log = console.log
+}
+else {
+	// browser
+	// assumes f.js is already included in page
+	log = document.write
+}
 
-F = require("./f.js")
+F.write = log
 
-log(F.tag("input",{type:"text",value:"joe bob",id:"username"}));
-log(F.tag("select",{name:"state", value:"WA"}, true));
+F.tag("input",{type:"text",value:"joe bob",id:"username"});
+F.tag("select",{name:"state", value:"WA"}, true);
 
-log(F.inp("username", "joe bob", "+", "myclass", {size: 20}));
+F.inp("username", "joe bob", "+", "myclass", {size: 20});
 
-log(F.str("firstname", "joebob", "first", ""));
-log(F.str("firstname", "bob"));
+F.str("firstname", "joebob", "first", "");
+F.str("firstname", "bob");
 
-log(F.pwd("pass"));
-log(F.pwd("+pass", "x"));
+F.pwd("pass");
+F.pwd("+pass", "x");
 
-log(F.txt("firstname", "bob"));
-log(F.txt("notes", "", "+", "tclass", {cols:80}));
-log(F.txt("notes", "Some default text"))
+F.txt("firstname", "bob");
+F.txt("notes", "", "+", "tclass", {cols:80});
+F.txt("notes", "Some default text")
 
-log(F.opt("Washington", "WA"))
-log(F.opt("Washington", "WA", null, null, {foo:"bar"}))
-log(F.opt({"a":"True", "b":"False"}))
-log(F.opt({"AK":"Alaska", "CA":"California", "WA":"Washington"}, "CA"))
+F.opt("Washington", "WA")
+F.opt("Washington", "WA", null, null, {foo:"bar"})
+F.opt({"a":"True", "b":"False"})
+F.opt({"AK":"Alaska", "CA":"California", "WA":"Washington"}, "CA")
 
-log( F.sel("color", F.opt({ "r":"Red", "g":"Green", "b":"Blue" }, "b"), "+", "selclass", {style:'width: 100%;'}));
+F.sel("color", F.opt({"r":"Red", "g":"Green", "b":"Blue"}, "b"), "+", "selclass", {style:'width: 100%;'});
 
-log( F.chk("cb4") )
-log( F.chk("+cb3", true) )
-log( F.chk("cb1", false, null, null, {value:"1"}) )
-log( F.chk("cb2", true, null, null, {value:"2"}) )
+F.chk("cb4"))
+F.chk("+cb3", true))
+F.chk("cb1", false, null, null, {value:"1"}))
+F.chk("cb2", true, null, null, {value:"2"}))
 
 
-log( F.rad("rd4") )
-log( F.rad("+rd3", true) )
-log( F.rad("rd1", false, null, null, {value:"1"}) )
-log( F.rad("rd2", true, null, null, {value:"2"}) )
+F.rad("rd4"))
+F.rad("+rd3", true))
+F.rad("rd1", false, null, null, {value:"1"}))
+F.rad("rd2", true, null, null, {value:"2"}))
 
-log(F.sub("submit"))
-log(F.sub("submit", "Send"))
-log(F.btn("submit", "Login"))
-log(F.btn("login"))
-log(F.btn("login", "Log on"))
+F.sub("submit")
+F.sub("submit", "Send")
+F.btn("submit", "Login")
+F.btn("login")
+F.btn("login", "Log on")
 
+F.btn("login_w", "Log on W")
 
 
 var form = {
@@ -50,5 +60,5 @@ var form = {
 	"": F.sub("Login"),
 	"forgot password?": "",
 }
-log(F.frm("theform", form, "formid", "formclass", {action:"foo.php"}))
+F.frm("theform", form, "formid", "formclass", {action:"foo.php"})
 

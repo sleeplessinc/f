@@ -36,6 +36,8 @@ F.tag = function(t, o, guts) {
 	h += ">"
 	if(typeof guts == "string")
 		h += guts+"</"+t+">"
+	if(F.write)
+		F.write(h)
 	return h;
 }
 
@@ -149,7 +151,6 @@ F.frm = function(n, f, i, c, e) {
 	}
 	return F.tag("form", o, s);
 }
-
 
 
 
