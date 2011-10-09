@@ -139,18 +139,22 @@ F.rad = function(n, v, i, c, e) {
 }
 
 
+/*
 F.frm = function(n, f, i, c, e) {
 	var o = F.mrg(n, null, i, c, e)
 	var tmpl = "\n" +
-		"	<div class=label>__label__</div>\n" +
-		"	<div class=field>__value__</div>\n" +
-		"";
+		"  <div class=row>\n"+
+		"    <div class=label>__label__</div>\n" +
+		"    <div class=field>__value__</div>\n" +
+		"  </div>\n"+
+		"\n";
 	var s = "";
 	for(k in f) {
-		s += tmpl.replace(/__label__/g, k).replace(/__value__/g, f[k])
+		s += tmpl.replace(/__label__/g, k || "&nbsp;").replace(/__value__/g, f[k] || "&nbsp;")
 	}
 	return F.tag("form", o, s);
 }
+*/
 
 
 

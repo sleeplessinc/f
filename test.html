@@ -1,5 +1,56 @@
 <html>
+
 <body>
-Body
-<script src=f.js>
-<script src=test.js>
+	<style>
+		.formclass {
+			border: solid 1px #aaa;
+		}
+		.formclass .row {
+			padding: 0.2em 0.5em;
+		}
+		.formclass .label {
+			display: inline;
+			float: left;
+			width: 100px;
+			font-weight: bold;
+		}
+		.formclass .field {
+			display: inline;
+			margin-left: 100px;
+		}
+	</style>
+<script src=jquery.js></script>
+<script src=f.js></script>
+<script>
+	F.write = function(s) { document.write(s) }
+
+	function build(t) {
+		var lines = t.trim().split("\n");
+		var h = "";
+		for(var i = 0; i < lines.length; i++) {
+			h += lines[i]+"<br>"
+		}
+		$("#output").html(h);
+	}
+</script>
+
+<table
+	style="width: 100%; height: 100%;"
+	>
+	<tr><td>
+		Output
+	</td><td
+		style="width: 30%;"
+		>
+		Input
+	</td></tr>
+	<tr
+		style="height: 100%;"
+		><td>
+		<div id=output></div>
+	</td><td>
+		<textarea 
+			style="width: 100%; height: 100%;"
+			onchange="build(this.value)"></textarea>
+	</td></tr>
+</table>
